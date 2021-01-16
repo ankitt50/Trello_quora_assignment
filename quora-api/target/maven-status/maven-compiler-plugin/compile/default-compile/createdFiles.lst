@@ -22,6 +22,7 @@ com/upgrad/quora/api/config/SwaggerConfiguration.class
 com/upgrad/quora/api/exception/RestExceptionHandler.class
 io/swagger/Swagger2SpringBoot.class
 io/swagger/api/ApiResponseMessage.class
+com/upgrad/quora/api/controller/AdminController.class
 io/swagger/api/NotFoundException.class
 com/upgrad/quora/api/model/AnswerDetailsResponse.class
 com/upgrad/quora/api/model/ErrorResponse.class

@@ -7,7 +7,9 @@ import java.util.List;
 @Entity
 @Table(name = "USERS")
 @NamedQueries({@NamedQuery(name = "UserEmail",query = "SELECT u FROM UserEntity u WHERE u.email = :email"),
-        @NamedQuery(name = "UserName",query = "SELECT u FROM UserEntity u WHERE u.userName = :username")})
+        @NamedQuery(name = "UserName",query = "SELECT u FROM UserEntity u WHERE u.userName = :username"),
+        @NamedQuery(name = "UserId",query = "SELECT u FROM UserEntity u WHERE u.UUID = :uuid")
+})
 public class UserEntity {
 
 
