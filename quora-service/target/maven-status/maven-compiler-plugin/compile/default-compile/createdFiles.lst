@@ -1,8 +1,10 @@
+com/upgrad/quora/service/dao/CommonDao.class
 com/upgrad/quora/service/business/AuthTokenService.class
 com/upgrad/quora/service/common/GenericErrorCode.class
 com/upgrad/quora/service/dao/AdminDao.class
 com/upgrad/quora/service/entity/UserEntity.class
 com/upgrad/quora/service/ServiceConfiguration.class
+com/upgrad/quora/service/business/CommonControllerService.class
 com/upgrad/quora/service/business/JwtTokenProvider.class
 com/upgrad/quora/service/dao/UserDao.class
 com/upgrad/quora/service/common/UnexpectedException.class
