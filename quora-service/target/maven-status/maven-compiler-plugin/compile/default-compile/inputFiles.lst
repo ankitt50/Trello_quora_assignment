@@ -1,6 +1,7 @@
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/entity/UserEntity.java
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/business/JwtTokenProvider.java
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/exception/SignOutRestrictedException.java
+/Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/business/AuthTokenService.java
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/ServiceConfiguration.java
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/business/PasswordCryptographyProvider.java
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/exception/AnswerNotFoundException.java
@@ -12,6 +13,7 @@
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/exception/SignUpRestrictedException.java
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/exception/AuthorizationFailedException.java
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/business/UserService.java
+/Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/dao/AuthTokenDao.java
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/exception/UserNotFoundException.java
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/exception/InvalidQuestionException.java
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/entity/UserAuthEntity.java

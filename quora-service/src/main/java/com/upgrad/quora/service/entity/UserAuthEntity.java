@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_auth")
+@NamedQueries({@NamedQuery(name = "CheckAuthToken",query = "SELECT a FROM UserAuthEntity a WHERE a.accessToken =:accessToken")})
 public class UserAuthEntity {
 
     @Id
