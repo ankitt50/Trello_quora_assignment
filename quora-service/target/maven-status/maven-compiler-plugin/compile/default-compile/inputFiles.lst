@@ -14,3 +14,4 @@
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/business/UserService.java
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/exception/UserNotFoundException.java
 /Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/exception/InvalidQuestionException.java
+/Users/ankit/Downloads/Trello_quora/quora-service/src/main/java/com/upgrad/quora/service/entity/UserAuthEntity.java

@@ -28,3 +28,4 @@
 /Users/ankit/Downloads/Trello_quora/quora-api/target/generated-sources/./com/upgrad/quora/api/model/QuestionEditResponse.java
 /Users/ankit/Downloads/Trello_quora/quora-api/target/generated-sources/./com/upgrad/quora/api/model/AnswerEditResponse.java
 /Users/ankit/Downloads/Trello_quora/quora-api/target/generated-sources/./com/upgrad/quora/api/model/SignupUserRequest.java
+/Users/ankit/Downloads/Trello_quora/quora-api/src/main/java/com/upgrad/quora/api/exception/RestExceptionHandler.java
