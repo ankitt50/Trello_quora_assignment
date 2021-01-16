@@ -10,9 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.UUID;
+
 @RestController
+@RequestMapping("/api")
 public class UserController {
 
     @Autowired
@@ -22,18 +26,19 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupUserResponse> signUp(SignupUserRequest request) throws SignUpRestrictedException {
         UserEntity alreadyExistingUser = userService.getUserByUsername(request.getUserName());
-        if (alreadyExistingUser == null) {
+        if (alreadyExistingUser != null) {
             throw new SignUpRestrictedException("SGR-001","Try any other Username, " +
                     "this Username has already been taken");
         }
         else {
             UserEntity userWithSameEmail = userService.getUserByEmail(request.getEmailAddress());
-            if (userWithSameEmail == null) {
+            if (userWithSameEmail != null) {
                 throw new SignUpRestrictedException("SGR-002","This user has" +
                         " already been registered, try with any other emailId");
             }
             else {
                 UserEntity newUser = new UserEntity();
+                newUser.setUUID(UUID.randomUUID().toString());
                 newUser.setFirstName(request.getFirstName());
                 newUser.setLastName(request.getLastName());
                 newUser.setUserName(request.getUserName());
