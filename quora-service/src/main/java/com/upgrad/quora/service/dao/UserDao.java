@@ -40,9 +40,9 @@ public class UserDao {
         }
     }
 
-    public UserEntity saveLoginInfo(UserAuthEntity userAuthEntity) {
+    public UserAuthEntity saveLoginInfo(UserAuthEntity userAuthEntity) {
         entityManager.persist(userAuthEntity);
-        return userAuthEntity.getUser();
+        return userAuthEntity;
     }
 
 }

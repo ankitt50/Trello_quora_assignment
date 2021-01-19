@@ -52,7 +52,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserEntity saveLoginInfo(UserAuthEntity userAuthEntity, String password) {
+    public UserAuthEntity saveLoginInfo(UserAuthEntity userAuthEntity, String password) {
         JwtTokenProvider tokenProvider = new JwtTokenProvider(password);
         LocalDateTime currentTime = LocalDateTime.now();
         LocalDateTime expiryTime = currentTime.plusHours(8);
