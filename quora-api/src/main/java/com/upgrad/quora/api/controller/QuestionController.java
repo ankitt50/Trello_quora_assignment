@@ -1,6 +1,8 @@
 package com.upgrad.quora.api.controller;
 
 import com.upgrad.quora.api.model.QuestionDetailsResponse;
+import com.upgrad.quora.api.model.QuestionEditRequest;
+import com.upgrad.quora.api.model.QuestionEditResponse;
 import com.upgrad.quora.api.model.QuestionRequest;
 import com.upgrad.quora.api.model.QuestionResponse;
 import com.upgrad.quora.service.business.AuthTokenService;
@@ -17,7 +19,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -80,5 +84,25 @@ public class QuestionController {
 
     return new ResponseEntity<>(questionDetailsResponseList, HttpStatus.OK);
   }
+
+  @PutMapping(path = "/question/edit/{questionId}", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
+      produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  public ResponseEntity<QuestionEditResponse> editQuestionContent(@PathVariable String questionId, @RequestHeader(name = "authorization") final String authToken,
+      final QuestionEditRequest questionEditRequest)
+      throws AuthorizationFailedException {
+
+    String [] bearerToken = authToken.split("Bearer ");
+
+    UserEntity userEntity = authTokenService.checkAuthentication(bearerToken[1], "editQuestionContent");
+
+    QuestionEntity question = questionService.editQuestionContent(questionId, questionEditRequest.getContent(), userEntity);
+
+    QuestionEditResponse questionEditResponse = new QuestionEditResponse();
+    questionEditResponse.setId(question.getUUID());
+    questionEditRequest.setContent(question.getContent());
+
+    return new ResponseEntity<>(questionEditResponse, HttpStatus.OK);
+  }
+
 
 }

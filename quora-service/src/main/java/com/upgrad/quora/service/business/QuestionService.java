@@ -24,4 +24,11 @@ public class QuestionService {
   public List<QuestionEntity> getAllQuestions() {
     return questionDao.getAllQuestions();
   }
+
+  @Transactional
+  public QuestionEntity editQuestionContent(String uuid, String updatedContent, UserEntity user)
+      throws AuthorizationFailedException {
+
+    return questionDao.editQuestionContent(uuid, updatedContent, user);
+  }
 }

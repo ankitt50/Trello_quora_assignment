@@ -24,4 +24,21 @@ public class QuestionDao {
   public List<QuestionEntity> getAllQuestions() {
     return entityManager.createNamedQuery("getAllQuestions", QuestionEntity.class).getResultList();
   }
+
+  public QuestionEntity editQuestionContent(String uuid, String updatedContent, UserEntity user)
+      throws AuthorizationFailedException {
+    QuestionEntity question;
+    try {
+      question = entityManager.createNamedQuery("getQuestionByUuidAndUserId", QuestionEntity.class)
+          .setParameter("uuid", uuid).setParameter("user", user).getSingleResult();
+    } catch (NoResultException exception) {
+      throw new AuthorizationFailedException("ATHR-003", "Only the question owner can edit the question");
+    }
+
+    question.setContent(updatedContent);
+
+    entityManager.merge(question);
+
+    return question;
+  }
 }
