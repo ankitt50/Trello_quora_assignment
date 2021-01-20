@@ -1,5 +1,6 @@
 package com.upgrad.quora.api.controller;
 
+import com.upgrad.quora.api.model.QuestionDetailsResponse;
 import com.upgrad.quora.api.model.QuestionRequest;
 import com.upgrad.quora.api.model.QuestionResponse;
 import com.upgrad.quora.service.business.AuthTokenService;
@@ -8,11 +9,14 @@ import com.upgrad.quora.service.entity.QuestionEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,6 +56,29 @@ public class QuestionController {
 
     return new ResponseEntity<QuestionResponse>(questionResponse, HttpStatus.CREATED);
 
+  }
+
+  @GetMapping(path = "/question/all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+  public ResponseEntity<List<QuestionDetailsResponse>> getAllQuestions(
+      @RequestHeader(name = "authorization") final String authToken)
+      throws AuthorizationFailedException {
+
+    String [] bearerToken = authToken.split("Bearer ");
+
+    authTokenService.checkAuthentication(bearerToken[1], "getAllQuestions");
+
+    List<QuestionEntity> questions = questionService.getAllQuestions();
+
+    List<QuestionDetailsResponse> questionDetailsResponseList = new ArrayList<>();
+
+    for (QuestionEntity question : questions) {
+      QuestionDetailsResponse questionDetailsResponse = new QuestionDetailsResponse();
+      questionDetailsResponse.setId(question.getUUID());
+      questionDetailsResponse.setContent(question.getContent());
+      questionDetailsResponseList.add(questionDetailsResponse);
+    }
+
+    return new ResponseEntity<>(questionDetailsResponseList, HttpStatus.OK);
   }
 
 }

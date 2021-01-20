@@ -17,6 +17,8 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "question")
+@NamedQueries({@NamedQuery(name = "getAllQuestions", query = "select q from QuestionEntity q"),
+    @NamedQuery(name = "getQuestionByUuidAndUserId",query = "SELECT q FROM QuestionEntity q WHERE q.UUID = :uuid AND q.user = :user")})
 public class QuestionEntity {
 
   @Id

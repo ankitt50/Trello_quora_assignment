@@ -20,4 +20,8 @@ public class QuestionDao {
     entityManager.persist(questionEntity);
     return questionEntity;
   }
+
+  public List<QuestionEntity> getAllQuestions() {
+    return entityManager.createNamedQuery("getAllQuestions", QuestionEntity.class).getResultList();
+  }
 }

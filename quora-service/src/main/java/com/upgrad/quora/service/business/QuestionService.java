@@ -21,4 +21,7 @@ public class QuestionService {
     return questionDao.createQuestion(questionEntity);
   }
 
+  public List<QuestionEntity> getAllQuestions() {
+    return questionDao.getAllQuestions();
+  }
 }
