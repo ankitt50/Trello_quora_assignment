@@ -3,6 +3,7 @@ package com.upgrad.quora.service.business;
 import com.upgrad.quora.service.dao.UserDao;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UserEntity;
+import com.upgrad.quora.service.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,7 +68,15 @@ public class UserService {
         userAuthEntity.setLoginTime(currentTime);
 
         return userDao.saveLoginInfo(userAuthEntity);
+    }
 
+    public UserEntity getUserByUuid(String uuid) throws UserNotFoundException {
+        UserEntity user = userDao.getUserByUuid(uuid);
+        if (user == null) {
+            throw new UserNotFoundException("USR-001", "User with entered uuid whose question details are to be seen does not exist");
+        }
+
+        return user;
     }
 
 }
