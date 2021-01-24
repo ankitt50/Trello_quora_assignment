@@ -29,6 +29,8 @@ public class AuthTokenService {
         error.put("getAllQuestions.ATHR-002", "User is signed out.Sign in first to get all questions");
         error.put("editQuestionContent.ATHR-001", "User has not signed in");
         error.put("editQuestionContent.ATHR-002", "User is signed out.Sign in first to edit the question");
+        error.put("deleteQuestion.ATHR-001", "User has not signed in");
+        error.put("deleteQuestion.ATHR-002", "User is signed out.Sign in first to delete a question");
     }
 
     @Transactional
@@ -51,7 +53,7 @@ public class AuthTokenService {
 
         if (userAuthEntity == null) {
             throw new AuthorizationFailedException("ATHR-001", error.get(methodName + ".ATHR-001"));
-        } else if (userAuthEntity.getLogoutTime() != null || now.isAfter(userAuthEntity.getExpiryTime()) ) {
+        } else if (userAuthEntity.getLogoutTime() != null) {
             throw new AuthorizationFailedException("ATHR-002", error.get(methodName + ".ATHR-002"));
         } else {
             return userAuthEntity.getUser();
