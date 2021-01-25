@@ -1,6 +1,8 @@
 package com.upgrad.quora.service.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -11,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -43,6 +46,17 @@ public class QuestionEntity {
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id")
   private UserEntity user;
+
+  @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+  private List<AnswerEntity> answers;
+
+  public List<AnswerEntity> getAnswers() {
+    return answers;
+  }
+
+  public void setAnswers(List<AnswerEntity> answers) {
+    this.answers = answers;
+  }
 
   public int getId() {
     return id;

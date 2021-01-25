@@ -1,60 +1,54 @@
 package com.upgrad.quora.service.entity;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.ZonedDateTime;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "answer")
-@NamedQueries({
-        @NamedQuery(name = "getAnswerById", query = "select a from AnswerEntity a where a.uuid=:uuid"),
-        @NamedQuery(
-                name = "getAllAnswersToQuestion",
-                query = "select a from AnswerEntity a where a.questionEntity.uuid = :uuid")
-})
+@NamedQueries({@NamedQuery(name = "answerById",query = "SELECT a FROM AnswerEntity a WHERE a.uuid =:uuid")})
 public class AnswerEntity {
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id")
+    private int id;
 
     @Column(name = "uuid")
     @Size(max = 200)
-    @NotNull
     private String uuid;
 
     @Column(name = "ans")
     @Size(max = 255)
-    @NotNull
-    private String answer;
+    private String ans;
 
     @Column(name = "date")
-    @NotNull
-    private ZonedDateTime date;
+    private LocalDateTime date;
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private UserEntity userEntity;
+    private UserEntity user;
 
-    @ManyToOne
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "question_id")
-    private QuestionEntity questionEntity;
+    private QuestionEntity question;
 
-    public Integer getId() {
+    public AnswerEntity() {
+
+    }
+
+    public AnswerEntity(@Size(max = 200) String uuid, @Size(max = 255) String ans, LocalDateTime date, UserEntity user, QuestionEntity question) {
+        this.uuid = uuid;
+        this.ans = ans;
+        this.date = date;
+        this.user = user;
+        this.question = question;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -66,50 +60,48 @@ public class AnswerEntity {
         this.uuid = uuid;
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getAns() {
+        return ans;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setAns(String ans) {
+        this.ans = ans;
     }
 
-    public ZonedDateTime getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(ZonedDateTime date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public UserEntity getUser() {
+        return user;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setUser(UserEntity user) {
+        this.user = user;
     }
 
-    public QuestionEntity getQuestionEntity() {
-        return questionEntity;
+    public QuestionEntity getQuestion() {
+        return question;
     }
 
-    public void setQuestionEntity(QuestionEntity questionEntity) {
-        this.questionEntity = questionEntity;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return new EqualsBuilder().append(this, obj).isEquals();
-    }
-
-    @Override
-    public int hashCode() {
-        return new HashCodeBuilder().append(this).hashCode();
+    public void setQuestion(QuestionEntity question) {
+        this.question = question;
     }
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this, ToStringStyle.MULTI_LINE_STYLE);
+        return "AnswerEntity{" +
+            "id=" + id +
+            ", uuid='" + uuid + '\'' +
+            ", ans='" + ans + '\'' +
+            ", date=" + date +
+            ", user=" + user +
+            ", question=" + question +
+            '}';
     }
+
 }

@@ -33,8 +33,8 @@ public class QuestionService {
     return questionDao.editQuestionContent(uuid, updatedContent, user);
   }
 
-  public QuestionEntity getQuestionByUuid(String uuid) throws InvalidQuestionException {
-    return questionDao.getQuestionByUuid(uuid);
+  public QuestionEntity getQuestionByUuid(String uuid, String errorMessage) throws InvalidQuestionException {
+    return questionDao.getQuestionByUuid(uuid, errorMessage);
   }
 
   @Transactional
