@@ -22,19 +22,16 @@ public class CommonController {
     @Autowired
     AuthTokenService authTokenService;
 
+    // this method fetches user details for the given user UUID
     @GetMapping(path = "userprofile/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDetailsResponse> getUserDetails(@PathVariable(name = "userId") final String uuid,
                                                               @RequestHeader(name = "authorization") final String authToken) throws AuthorizationFailedException, UserNotFoundException {
 
+        String token = getToken(authToken); // this method extracts the token from the JWT token string sent in the Request Header
 
-//        String[] stringArray = authToken.split("Bearer ");
-//        String accessToken = stringArray[1];
+        authTokenService.checkAuthentication(token, "getUserDetails"); // check validity of auth token
 
-        String token = getToken(authToken);
-
-        authTokenService.checkAuthentication(token, "getUserDetails");
-
-        UserEntity userEntity = service.getUserDetails(uuid);
+        UserEntity userEntity = service.getUserDetails(uuid); // fetch user entity from DB
 
         UserDetailsResponse response = new UserDetailsResponse().firstName(userEntity.getFirstName()).
                 lastName(userEntity.getLastName()).userName(userEntity.getUserName()).
