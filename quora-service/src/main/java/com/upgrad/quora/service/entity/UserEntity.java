@@ -12,7 +12,7 @@ import java.util.List;
 })
 public class UserEntity {
 
-
+    // primary key
     @javax.persistence.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -69,13 +69,14 @@ public class UserEntity {
     @Size(max = 30)
     private String contactNumber;
 
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<UserAuthEntity> authTokens;
 
+    // a user can post many questions
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<QuestionEntity> questions;
 
+    // a user can post many answers
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<AnswerEntity> answers;
 

@@ -19,6 +19,7 @@ public class AdminBuisnessService {
     @Autowired
     AdminDao adminDao;
 
+    // Checks validity of authorization token.
     @Transactional
     public UserEntity checkAuthToken(String authToken) throws AuthorizationFailedException {
 
@@ -36,6 +37,7 @@ public class AdminBuisnessService {
         }
     }
 
+    // Deletes the user based on the given UUID
     @Transactional
     public UserEntity deleteUser(String uuid) throws UserNotFoundException {
         UserEntity userEntity = adminDao.deleteUser(uuid);

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// This class contains the methods to implement the business logic for the common controller.
 @Service
 public class CommonControllerService {
 
@@ -19,6 +20,7 @@ public class CommonControllerService {
     @Autowired
     CommonDao commonDao;
 
+    // Checks validity of authorization token.
     @Transactional
     public void checkAuthToken(String authToken) throws AuthorizationFailedException {
 
@@ -37,6 +39,7 @@ public class CommonControllerService {
         }
     }
 
+    // This method fetches the details of the user based on the given UUID and throws an exception if the UUID is not valid.
     @Transactional
     public UserEntity getUserDetails(String uuid) throws UserNotFoundException {
         UserEntity userEntity = commonDao.getUserDetails(uuid);

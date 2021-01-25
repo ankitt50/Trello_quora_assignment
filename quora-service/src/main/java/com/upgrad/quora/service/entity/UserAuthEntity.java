@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @NamedQueries({@NamedQuery(name = "CheckAuthToken",query = "SELECT a FROM UserAuthEntity a WHERE a.accessToken =:accessToken")})
 public class UserAuthEntity {
 
+    // primary key
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -16,6 +17,7 @@ public class UserAuthEntity {
     @Column(name = "uuid")
     private String uuid;
 
+    // user can have multiple login sessions
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private UserEntity user;
