@@ -26,7 +26,7 @@ import java.util.Base64;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 public class UserController {
 
     @Autowired
@@ -80,12 +80,20 @@ public class UserController {
     @PostMapping(path = "user/signin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SigninResponse> signIn(@RequestHeader(name = "authorization") final String authorization)
             throws AuthenticationFailedException {
-        String[] stringArray = authorization.split("Basic ");
-        byte[] array = Base64.getDecoder().decode(stringArray[1]);
+//        String[] stringArray = authorization.split("Basic ");
+
+        String token = getSignInToken(authorization);
+
+        byte[] array = Base64.getDecoder().decode(token);
         String usrPsw = new String(array);
-        String[] usrPswArray = usrPsw.split(":");
-        String username = usrPswArray[0];
-        String password = usrPswArray[1];
+        String username = "", password = "";
+        try {
+            String[] usrPswArray = usrPsw.split(":");
+            username = usrPswArray[0];
+            password = usrPswArray[1];
+        } catch (ArrayIndexOutOfBoundsException ex) {
+            throw new AuthenticationFailedException("ATH-002", "Password failed");
+        }
 
         UserEntity userWithUsername = userService.getUserByUsername(username);
         if (userWithUsername == null) {
@@ -121,9 +129,7 @@ public class UserController {
 //        UserEntity userEntity = authTokenService.checkAuthToken(accessToken);
 
         String token = getToken(authToken);
-
-        UserEntity userEntity =  authTokenService.checkAuthentication(token, "getAllQuestionsByUser");
-
+        UserEntity userEntity =  authTokenService.checkAuthToken(token);
         return new ResponseEntity<SignoutResponse>(new SignoutResponse().id(userEntity.getUUID()).message("SIGNED OUT SUCCESSFULLY"), HttpStatus.OK);
     }
 
@@ -133,6 +139,18 @@ public class UserController {
         if (authToken.startsWith("Bearer ")) {
             String [] bearerToken = authToken.split("Bearer ");
             token = bearerToken[1];
+        } else {
+            token = authToken;
+        }
+        return token;
+    }
+
+    // this method extracts the token from the base64 encoded authentication String
+    private String getSignInToken(String authToken) {
+        String token;
+        if (authToken.startsWith("Basic ")) {
+            String [] basicToken = authToken.split("Basic ");
+            token = basicToken[1];
         } else {
             token = authToken;
         }
