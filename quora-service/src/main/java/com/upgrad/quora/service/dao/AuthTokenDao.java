@@ -15,7 +15,7 @@ public class AuthTokenDao {
     @PersistenceContext
     EntityManager entityManager;
 
-    public UserAuthEntity checkAuthToken(String authToken) {
+    public static UserAuthEntity checkAuthToken(String authToken) {
         try {
             return entityManager.createNamedQuery("CheckAuthToken", UserAuthEntity.class).
                     setParameter("accessToken", authToken).getSingleResult();
