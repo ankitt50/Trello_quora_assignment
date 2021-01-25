@@ -9,6 +9,7 @@ import com.upgrad.quora.service.business.UserService;
 import com.upgrad.quora.service.entity.UserAuthEntity;
 import com.upgrad.quora.service.entity.UserEntity;
 import com.upgrad.quora.service.exception.AuthenticationFailedException;
+import com.upgrad.quora.service.exception.AuthorizationFailedException;
 import com.upgrad.quora.service.exception.SignOutRestrictedException;
 import com.upgrad.quora.service.exception.SignUpRestrictedException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,12 +113,29 @@ public class UserController {
 
     @PostMapping(path = "user/signout", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignoutResponse> signOut(@RequestHeader(name = "authorization") final String authToken)
-            throws SignOutRestrictedException {
+        throws SignOutRestrictedException, AuthorizationFailedException {
 
-        String[] stringArray = authToken.split("Bearer ");
-        String accessToken = stringArray[1];
+//        String[] stringArray = authToken.split("Bearer ");
+//        String accessToken = stringArray[1];
+//
+//        UserEntity userEntity = authTokenService.checkAuthToken(accessToken);
 
-        UserEntity userEntity = authTokenService.checkAuthToken(accessToken);
+        String token = getToken(authToken);
+
+        UserEntity userEntity =  authTokenService.checkAuthentication(token, "getAllQuestionsByUser");
+
         return new ResponseEntity<SignoutResponse>(new SignoutResponse().id(userEntity.getUUID()).message("SIGNED OUT SUCCESSFULLY"), HttpStatus.OK);
+    }
+
+    // this method extracts the token from the JWT token string sent in the Request Header
+    private String getToken(String authToken) {
+        String token;
+        if (authToken.startsWith("Bearer ")) {
+            String [] bearerToken = authToken.split("Bearer ");
+            token = bearerToken[1];
+        } else {
+            token = authToken;
+        }
+        return token;
     }
 }

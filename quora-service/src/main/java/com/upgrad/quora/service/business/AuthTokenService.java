@@ -33,6 +33,16 @@ public class AuthTokenService {
         error.put("deleteQuestion.ATHR-002", "User is signed out.Sign in first to delete a question");
         error.put("getAllQuestionsByUser.ATHR-001", "User has not signed in");
         error.put("getAllQuestionsByUser.ATHR-002", "User is signed out.Sign in first to get all questions posted by a specific user");
+        error.put("createAnswer.ATHR-001", "User has not signed in");
+        error.put("createAnswer.ATHR-002", "User is signed out.Sign in first to post an answer");
+        error.put("editAnswerContent.ATHR-001", "User has not signed in");
+        error.put("editAnswerContent.ATHR-002", "User is signed out.Sign in first to edit an answer");
+        error.put("deleteAnswer.ATHR-001", "User has not signed in");
+        error.put("deleteAnswer.ATHR-002", "User is signed out.Sign in first to delete an answer");
+        error.put("getAllAnswersToQuestion.ATHR-001", "User has not signed in");
+        error.put("getAllAnswersToQuestion.ATHR-002", "User is signed out.Sign in first to get the answers");
+        error.put("deleteUser.ATHR-001", "User has not signed in");
+        error.put("deleteUser.ATHR-002", "User is signed out");
 
     }
 

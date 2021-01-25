@@ -27,18 +27,18 @@ public class QuestionDao {
     return entityManager.createNamedQuery("getAllQuestions", QuestionEntity.class).getResultList();
   }
 
-  public QuestionEntity getQuestionByUuid(String uuid) throws InvalidQuestionException {
+  public QuestionEntity getQuestionByUuid(String uuid, String errorMessage) throws InvalidQuestionException {
     try {
       return entityManager.createNamedQuery("getQuestionByUuid", QuestionEntity.class)
           .setParameter("uuid", uuid).getSingleResult();
     } catch (NoResultException exception) {
-      throw new InvalidQuestionException("QUES-001", "'Entered question uuid does not exist");
+      throw new InvalidQuestionException("QUES-001", errorMessage);
     }
   }
 
   public QuestionEntity deleteQuestion(String uuid, UserEntity user)
       throws InvalidQuestionException, AuthorizationFailedException {
-    QuestionEntity question = getQuestionByUuid(uuid);
+    QuestionEntity question = getQuestionByUuid(uuid, "Entered question uuid does not exist");
     if (question.getUser().equals(user) || user.getRole().equals("admin")) {
       entityManager.remove(question);
       return question;
@@ -50,7 +50,7 @@ public class QuestionDao {
   @Transactional
   public QuestionEntity editQuestionContent(String uuid, String updatedContent, UserEntity user)
       throws AuthorizationFailedException, InvalidQuestionException {
-    QuestionEntity question = getQuestionByUuid(uuid);
+    QuestionEntity question = getQuestionByUuid(uuid, "Entered question uuid does not exist");
 
     if (question.getUser() != user && user.getRole() != "admin") {
       // throw error if the user is not an admin or does not own the question
