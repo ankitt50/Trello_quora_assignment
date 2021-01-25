@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Table(name = "answer")
 @NamedQueries({@NamedQuery(name = "answerById",query = "SELECT a FROM AnswerEntity a WHERE a.uuid =:uuid")})
 public class AnswerEntity {
+    // primary key
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -24,10 +25,12 @@ public class AnswerEntity {
     @Column(name = "date")
     private LocalDateTime date;
 
+    // a user can post many answers
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    // a question can have many answers
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "question_id")
     private QuestionEntity question;

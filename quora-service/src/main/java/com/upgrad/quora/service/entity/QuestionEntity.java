@@ -26,6 +26,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "getAllQuestionsByUser", query = " SELECT q FROM QuestionEntity q WHERE q.user = :user")})
 public class QuestionEntity {
 
+  // primary key
   @Id
   @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,10 +44,12 @@ public class QuestionEntity {
   @Column(name = "date")
   private LocalDateTime date;
 
+  // a user can post many questions
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id")
   private UserEntity user;
 
+  // a question can have many answers
   @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
   private List<AnswerEntity> answers;
 

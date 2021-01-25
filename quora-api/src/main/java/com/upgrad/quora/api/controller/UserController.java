@@ -126,7 +126,7 @@ public class UserController {
     public ResponseEntity<SignoutResponse> signOut(@RequestHeader(name = "authorization") final String authToken)
         throws SignOutRestrictedException, AuthorizationFailedException {
 
-        String token = getToken(authToken); 
+        String token = getToken(authToken);
         UserEntity userEntity =  authTokenService.checkAuthToken(token);
         return new ResponseEntity<SignoutResponse>(new SignoutResponse().id(userEntity.getUUID()).message("SIGNED OUT SUCCESSFULLY"), HttpStatus.OK);
     }

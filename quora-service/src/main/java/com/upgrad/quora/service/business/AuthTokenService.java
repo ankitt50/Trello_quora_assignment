@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// This class contains the methods to implement the business logic for the Authentication mechanism of the site.
 @Service
 public class AuthTokenService {
     @Autowired
@@ -20,8 +21,10 @@ public class AuthTokenService {
 
     private Map<String, String> error;
 
+    // This method contains all the error messages that will be thrown by the application.
     @PostConstruct
     private void errorMessageSetup() {
+        // created a hashmap for all the different authentication errors thrown by different methods
         error = new HashMap<>();
         error.put("createQuestion.ATHR-001", "User has not signed in");
         error.put("createQuestion.ATHR-002", "User is signed out.Sign in first to post a question");
@@ -46,9 +49,9 @@ public class AuthTokenService {
 
     }
 
+    // This method checks existing auth token, and then signs out the user if the auth token is found. If the auth token is not found, it displays an error message.
     @Transactional
     public UserEntity checkAuthToken(String authToken) throws SignOutRestrictedException {
-
 
 
         UserAuthEntity userAuthEntity = authTokenDao.checkAuthToken(authToken);
@@ -60,6 +63,7 @@ public class AuthTokenService {
         }
     }
 
+    // This method checks the auth token to validate if the user is signed in. If auth token is found, it returns the user details matching the auth token.
     public UserEntity checkAuthentication(String authToken, String methodName) throws AuthorizationFailedException {
         UserAuthEntity userAuthEntity = authTokenDao.checkAuthToken(authToken);
         LocalDateTime now = LocalDateTime.now();
