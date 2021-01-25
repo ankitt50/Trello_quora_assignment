@@ -35,22 +35,24 @@ public class UserController {
     @Autowired
     AuthTokenService authTokenService;
 
+    // register a new user
     @PostMapping(path = "user/signup", consumes = MediaType.APPLICATION_JSON_UTF8_VALUE,
             produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignupUserResponse> signUp(SignupUserRequest request)
             throws SignUpRestrictedException {
         UserEntity alreadyExistingUser = userService.getUserByUsername(request.getUserName());
-        if (alreadyExistingUser != null) {
+        if (alreadyExistingUser != null) { // throw an error if username already exists in DB
             throw new SignUpRestrictedException("SGR-001","Try any other Username, " +
                     "this Username has already been taken");
         }
         else {
             UserEntity userWithSameEmail = userService.getUserByEmail(request.getEmailAddress());
-            if (userWithSameEmail != null) {
+            if (userWithSameEmail != null) { // throw error if email ID has already been used
                 throw new SignUpRestrictedException("SGR-002","This user has" +
                         " already been registered, try with any other emailId");
             }
             else {
+                // create and populate new user entity:
                 UserEntity newUser = new UserEntity();
                 newUser.setUUID(UUID.randomUUID().toString());
                 newUser.setFirstName(request.getFirstName());
@@ -60,7 +62,7 @@ public class UserController {
                 newUser.setCountry(request.getCountry());
                 newUser.setAboutMe(request.getAboutMe());
                 newUser.setDob(request.getDob());
-                newUser.setRole("nonadmin");
+                newUser.setRole("nonadmin"); // default user role
                 newUser.setContactNumber(request.getContactNumber());
                 newUser.setPassword(request.getPassword());
 
@@ -77,27 +79,27 @@ public class UserController {
 
     }
 
+    // sign in user and return JWT token
     @PostMapping(path = "user/signin", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SigninResponse> signIn(@RequestHeader(name = "authorization") final String authorization)
             throws AuthenticationFailedException {
-//        String[] stringArray = authorization.split("Basic ");
 
-        String token = getSignInToken(authorization);
+        String encodedString = getSignInToken(authorization); // extract base64 encoded username and password
 
-        byte[] array = Base64.getDecoder().decode(token);
+        byte[] array = Base64.getDecoder().decode(encodedString); // decode username and password
         String usrPsw = new String(array);
         String username = "", password = "";
         try {
-            String[] usrPswArray = usrPsw.split(":");
+            String[] usrPswArray = usrPsw.split(":"); // split username and password
             username = usrPswArray[0];
             password = usrPswArray[1];
         } catch (ArrayIndexOutOfBoundsException ex) {
-            throw new AuthenticationFailedException("ATH-002", "Password failed");
+            throw new AuthenticationFailedException("ATH-002", "Password failed"); // throw error if authentication String is incorrect
         }
 
         UserEntity userWithUsername = userService.getUserByUsername(username);
         if (userWithUsername == null) {
-            throw new AuthenticationFailedException("ATH-001","This username does not exist");
+            throw new AuthenticationFailedException("ATH-001","This username does not exist"); // throw error if username does not exist
         }
         else {
             if (userService.isPasswordCorrect(password, userWithUsername)) {
@@ -109,26 +111,22 @@ public class UserController {
 
 
                 HttpHeaders headers = new HttpHeaders();
-                headers.add("access-token","Bearer "+userAuthEntity.getAccessToken());
+                headers.add("access-token","Bearer "+userAuthEntity.getAccessToken()); // add JWT token in header and return
 
                 return new ResponseEntity<SigninResponse>(new SigninResponse().id(userEntity.getUUID()).message("SIGNED IN SUCCESSFULLY"),headers, HttpStatus.OK);
             }
             else {
-                throw new AuthenticationFailedException("ATH-002","Password failed");
+                throw new AuthenticationFailedException("ATH-002","Password failed"); // throw error if password is wrong
             }
         }
     }
 
+    // signout user and update log out time in DB
     @PostMapping(path = "user/signout", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<SignoutResponse> signOut(@RequestHeader(name = "authorization") final String authToken)
         throws SignOutRestrictedException, AuthorizationFailedException {
 
-//        String[] stringArray = authToken.split("Bearer ");
-//        String accessToken = stringArray[1];
-//
-//        UserEntity userEntity = authTokenService.checkAuthToken(accessToken);
-
-        String token = getToken(authToken);
+        String token = getToken(authToken); 
         UserEntity userEntity =  authTokenService.checkAuthToken(token);
         return new ResponseEntity<SignoutResponse>(new SignoutResponse().id(userEntity.getUUID()).message("SIGNED OUT SUCCESSFULLY"), HttpStatus.OK);
     }

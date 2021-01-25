@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+
 @RestController
 @RequestMapping("/")
 public class AdminController {
@@ -26,26 +27,22 @@ public class AdminController {
     @Autowired
     AuthTokenService authTokenService;
 
+    // this method deletes an existing user
     @DeleteMapping(path = "admin/user/{userId}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserDeleteResponse> deleteUser(@PathVariable(name = "userId") final String uuid,
                                                          @RequestHeader("authorization") final String authToken) throws AuthorizationFailedException, UserNotFoundException {
 
-//        String[] stringArray = authToken.split("Bearer ");
-//        String accessToken = stringArray[1];
-//
-//        UserEntity userEntity = adminBuisnessService.checkAuthToken(accessToken);
+        String token = getToken(authToken); // this method extracts the token from the JWT token string sent in the Request Header
 
-        String token = getToken(authToken);
+        UserEntity userEntity = authTokenService.checkAuthentication(token, "deleteUser"); // checks if the auth token is valid or not
 
-        UserEntity userEntity = authTokenService.checkAuthentication(token, "deleteUser");
-
-        if (userEntity.getRole().compareTo("admin") == 0) {
+        if (userEntity.getRole().compareTo("admin") == 0) { // checks if the user role is admin type
             UserEntity deletedUser = adminBuisnessService.deleteUser(uuid);
             return new ResponseEntity<UserDeleteResponse>(new UserDeleteResponse().id(deletedUser.getUUID()).status("USER SUCCESSFULLY DELETED"), HttpStatus.OK);
 
         }
         else {
-            throw new AuthorizationFailedException("ATHR-003", "Unauthorized Access, Entered user is not an admin");
+            throw new AuthorizationFailedException("ATHR-003", "Unauthorized Access, Entered user is not an admin"); // throw error if user is nonadmin
         }
 
     }

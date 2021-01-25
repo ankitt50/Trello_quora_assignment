@@ -50,9 +50,9 @@ public class QuestionController {
   public ResponseEntity<QuestionResponse> createQuestion(@RequestHeader(name = "authorization") final String authToken, final QuestionRequest questionRequest)
       throws AuthorizationFailedException {
 
-    String token = getToken(authToken);
+    String token = getToken(authToken); // this method extracts the token from the JWT token string sent in the Request Header
 
-    UserEntity userEntity = authTokenService.checkAuthentication(token, "createQuestion");
+    UserEntity userEntity = authTokenService.checkAuthentication(token, "createQuestion"); // check auth token validity
 
     QuestionEntity questionEntity = new QuestionEntity();
     questionEntity.setUUID(UUID.randomUUID().toString());
@@ -60,7 +60,7 @@ public class QuestionController {
     questionEntity.setDate(LocalDateTime.now());
     questionEntity.setUser(userEntity);
 
-    QuestionEntity createdQuestion = questionService.createQuestion(questionEntity);
+    QuestionEntity createdQuestion = questionService.createQuestion(questionEntity); // save question entity to DB
 
     QuestionResponse questionResponse = new QuestionResponse();
     questionResponse.setId(createdQuestion.getUUID());
@@ -76,11 +76,11 @@ public class QuestionController {
       @RequestHeader(name = "authorization") final String authToken)
       throws AuthorizationFailedException {
 
-    String token = getToken(authToken);
+    String token = getToken(authToken); // this method extracts the token from the JWT token string sent in the Request Header
 
-    authTokenService.checkAuthentication(token, "getAllQuestions");
+    authTokenService.checkAuthentication(token, "getAllQuestions"); // check auth token validity
 
-    List<QuestionEntity> questions = questionService.getAllQuestions();
+    List<QuestionEntity> questions = questionService.getAllQuestions(); // return list of questions
 
     List<QuestionDetailsResponse> questionDetailsResponseList = new ArrayList<>();
 
@@ -101,11 +101,11 @@ public class QuestionController {
       final QuestionEditRequest questionEditRequest)
       throws AuthorizationFailedException, InvalidQuestionException {
 
-    String token = getToken(authToken);
+    String token = getToken(authToken); // this method extracts the token from the JWT token string sent in the Request Header
 
-    UserEntity userEntity = authTokenService.checkAuthentication(token, "editQuestionContent");
+    UserEntity userEntity = authTokenService.checkAuthentication(token, "editQuestionContent"); // check auth token validity
 
-    QuestionEntity question = questionService.editQuestionContent(questionId, questionEditRequest.getContent(), userEntity);
+    QuestionEntity question = questionService.editQuestionContent(questionId, questionEditRequest.getContent(), userEntity); // edit the given question in DB
 
     QuestionEditResponse questionEditResponse = new QuestionEditResponse();
     questionEditResponse.setId(question.getUUID());
@@ -119,10 +119,10 @@ public class QuestionController {
   public ResponseEntity<QuestionDeleteResponse> deleteQuestion(@PathVariable String questionId, @RequestHeader(name = "authorization") final String authToken)
       throws AuthorizationFailedException, InvalidQuestionException {
 
-    String token = getToken(authToken);
+    String token = getToken(authToken); // this method extracts the token from the JWT token string sent in the Request Header
 
-    UserEntity userEntity = authTokenService.checkAuthentication(token, "deleteQuestion");
-    QuestionEntity question = questionService.deleteQuestion(questionId, userEntity);
+    UserEntity userEntity = authTokenService.checkAuthentication(token, "deleteQuestion"); // check auth token validity
+    QuestionEntity question = questionService.deleteQuestion(questionId, userEntity); // delete question in DB
 
     QuestionDeleteResponse questionDeleteResponse = new QuestionDeleteResponse();
     questionDeleteResponse.setId(question.getUUID());
@@ -138,13 +138,13 @@ public class QuestionController {
       @RequestHeader(name = "authorization") final String authToken)
       throws AuthorizationFailedException, UserNotFoundException {
 
-    String token = getToken(authToken);
+    String token = getToken(authToken); // this method extracts the token from the JWT token string sent in the Request Header
 
-    authTokenService.checkAuthentication(token, "getAllQuestionsByUser");
+    authTokenService.checkAuthentication(token, "getAllQuestionsByUser"); // check auth token validity
 
-    UserEntity user = userService.getUserByUuid(userId);
+    UserEntity user = userService.getUserByUuid(userId); // get user entity based on given UUID
 
-    List<QuestionEntity> questions = questionService.getAllQuestionsByUser(user);
+    List<QuestionEntity> questions = questionService.getAllQuestionsByUser(user); // fetch list of questions for the given user
 
     List<QuestionDetailsResponse> questionDetailsResponseList = new ArrayList<>();
 
